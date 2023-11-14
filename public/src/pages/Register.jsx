@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
+import { ToastContainer, toast } from "react-toastify"; 
 
 function Register() {
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+
+  })
+
   const handleSubmit = (event) => {
     event.preventDefault();
     alert("Form");
   };
 
-  const handleChange = (e) => {};
+  const handleValidation = () => {
+    const { username, email, password, confirmPassword } = values;
+    if ( password !== confirmPassword ) {
+        toast.error("Password and confirm password do not match!")
+    }
+  }
+
+  const handleChange = (event) => {
+    setValues({...values, [event.target.name]:event.target.value})
+  };
 
   return (
     <>
@@ -49,6 +67,7 @@ function Register() {
           </span>
         </form>
       </FormContainer>
+      <ToastContainer />
     </>
   );
 }
