@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
-import { ToastContainer, toast } from "react-toastify"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { registerRoute } from "../utils/APIRoutes";
 
 function Register() {
   const [values, setValues] = useState({
@@ -10,19 +13,47 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-
   })
 
-  const handleSubmit = (event) => {
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert("Form");
+    if (handleValidation()) {
+       const { username, email, password, confirmPassword } = values;
+       const { data } = await axios.post(registerRoute, {
+        username,
+        email,
+        password,
+       });
+    }
   };
 
   const handleValidation = () => {
     const { username, email, password, confirmPassword } = values;
-    if ( password !== confirmPassword ) {
-        toast.error("Password and confirm password do not match!")
+    if (password !== confirmPassword) {
+        toast.error("Password and confirm password do not match!", toastOptions);
+        return false;
     }
+    else if (username.length < 3) {
+        toast.error("Username should be bigger than 3 characters!", toastOptions);
+        return false;
+    }
+    else if (password.length < 8) {
+        toast.error("This password should be min 8 characters!", toastOptions);
+        return false;
+    }
+    else if (email.length === "") {
+        toast.error("Email is required!", toastOptions);
+        return false;
+    }
+    return true;
   }
 
   const handleChange = (event) => {
