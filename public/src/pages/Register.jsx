@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
 
 function Register() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -23,15 +24,31 @@ function Register() {
     theme: "dark",
   }
 
+  useEffect(() => {
+    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+      navigate("/");
+    }
+  },);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-       const { username, email, password, confirmPassword } = values;
+       const { username, email, password } = values;
        const { data } = await axios.post(registerRoute, {
         username,
         email,
         password,
        });
+       if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem(
+          process.env.REACT_APP_LOCALHOST_KEY,
+          JSON.stringify(data.user)
+        );
+        navigate("/");
+      }
     }
   };
 
