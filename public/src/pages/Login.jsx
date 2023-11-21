@@ -23,10 +23,10 @@ function Login() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+    if (localStorage.getItem('chat-app-user')) {
       navigate("/");
     }
-  },);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
