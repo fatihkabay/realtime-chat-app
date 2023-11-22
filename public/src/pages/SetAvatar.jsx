@@ -29,9 +29,13 @@ export default function SetAvatar() {
     for (let i=0; i<4; i++) {
         const image = await axios.get(
             `${api}/${Math.round(Math.random() * 1000)}`
-        )
-    }
-  }, [])
+        );
+        const buffer = new Buffer(image.data);
+        data.push(buffer.toString("base64"));
+    };
+    setAvatars(data);
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
@@ -39,7 +43,15 @@ export default function SetAvatar() {
         <div className="title-container">
           <h1>Pick an avatar as your profile picture</h1>
         </div>
-        <div className="avatars">{}</div>
+        <div className="avatars">{
+            avatars.map((avatars, index) => {
+                return (
+                    <div className={`avatar ${selectedAvatars === index ? "selected" : ""}`}>
+                        <img src={`data:image/svg+xml; base64, ${avatars}`} alt="avatar" onClick={() => setSelectedAvatar(index)}/>
+                    </div>
+                )
+            })
+        }</div>
       </Container>
       <ToastContainer />
     </>
