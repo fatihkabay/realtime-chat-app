@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
 
-function Register() {
+export default function Register() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
@@ -186,5 +186,3 @@ const FormContainer = styled.div`
       font-weight: bold;
     }
 `;
-
-export default Register;

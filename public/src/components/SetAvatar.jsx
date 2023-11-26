@@ -13,7 +13,7 @@ export default function SetAvatar() {
   const navigate = useNavigate(api);
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedAvatar, setSelectedAvatars] = useState(undefined);
+  const [selectedAvatar, setSelectedAvatar] = useState(undefined);
 
   const toastOptions = {
     position: "bottom-right",
@@ -22,6 +22,11 @@ export default function SetAvatar() {
     draggable: true,
     theme: "dark",
   };
+
+  useEffect(async () => {
+    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+      navigate("/login");
+  }, []);
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
@@ -66,27 +71,27 @@ export default function SetAvatar() {
   return (
     <>
     {isLoading ? (
-        <Container>
-          <img src={loader} alt="loader" className="loader" />
-        </Container>
-      ) : (
+      <Container>
+        <img src={loader} alt="loader" className="loader" />
+      </Container>
+    ) : (
       <Container>
         <div className="title-container">
-          <h1>Pick an avatar as your profile picture</h1>
+          <h1>Pick an Avatar as your profile picture</h1>
         </div>
         <div className="avatars">
-          {avatars.map((avatars, index) => {
+          {avatars.map((avatar, index) => {
             return (
               <div
                 className={`avatar ${
                   selectedAvatar === index ? "selected" : ""
                 }`}
-                key={index}
               >
                 <img
-                  src={`data:image/svg+xml; base64, ${avatars}`}
+                  src={`data:image/svg+xml;base64,${avatar}`}
                   alt="avatar"
-                  onClick={() => setSelectedAvatars(index)}
+                  key={avatar}
+                  onClick={() => setSelectedAvatar(index)}
                 />
               </div>
             );
@@ -97,8 +102,8 @@ export default function SetAvatar() {
         </button>
         <ToastContainer />
       </Container>
-      )}
-    </>
+    )}
+  </>
   );
 }
 
