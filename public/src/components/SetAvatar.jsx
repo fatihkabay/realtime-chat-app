@@ -23,10 +23,10 @@ export default function SetAvatar() {
     theme: "dark",
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
-  }, []);
+  });
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
@@ -58,8 +58,7 @@ export default function SetAvatar() {
     const data = [];
     for (let i = 0; i < 4; i++) {
        async function image() {
-          const imageLoader = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`)
-          return imageLoader;
+          await axios.get(`${api}/${Math.round(Math.random() * 1000)}`)
        }
       const buffer = new Buffer([image.data]);
       data.push(buffer.toString("base64"));
