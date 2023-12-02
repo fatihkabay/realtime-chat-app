@@ -1,32 +1,27 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
+mongoose.connect("mongodb+srv://mfthkabay:mfatihkabay66@fatihkabay.swxcivm.mongodb.net/")
+.then(() => {
+    console.log("mongodb connected");
+})
+.catch(() => {
+    console.log('failed');
+})
 
-const userSchema = new mongoose.Schema({
+const newSchema=new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        min: 3,
-        max: 20,
-        unique: true,
+        required: true
     },
     email: {
         type: String,
-        required: true,
-        unique: true,
-        max: 50,
+        required: true
     },
     password: {
         type: String,
-        required: true,
-        min: 8,
-    },
-    isAvatarImageSet: {
-        type: Boolean,
-        default: false,
-    },
-    avatarImage: {
-        type: String,
-        default: "",
-    },
-});
+        required: true
+    }
+})
 
-module.exports = mongoose.model('Users', userSchema);
+const collection = mongoose.model("Users",newSchema)
+
+module.exports=collection

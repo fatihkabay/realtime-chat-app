@@ -1,27 +1,30 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const userRoutes = require("./routes/userRoutes");
-const app = express();
-require("dotenv").config();
+const { MongoClient } = require('mongodb');
+// or as an es module:
+// import { MongoClient } from 'mongodb'
 
-app.use(cors());
-app.use(express.json());
+// Connection URL
+const url = 'mongodb://localhost:27017/talkker';
+const client = new MongoClient(url);
+const {username, email, password} = require('../server/model/userModel');
 
-app.use("/api/auth", userRoutes);
+// Database Name
+const dbName = 'myProject';
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("DB Connection Successfull");
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
+async function main() {
+  // Use connect method to connect to the server
+  await client.connect();
+  console.log('Connected successfully to server');
+  const db = client.db(dbName);
+  const collection = db.collection('documents');
+const insertResult = await collection.insertMany([{ username: username }, { email: email }, { password: password }]);
+console.log('Inserted documents =>', insertResult);
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Server started on port ${process.env.PORT}!`);
-});
+  // the following code examples can be pasted here...
+
+  return 'done.';
+}
+
+main()
+  .then(console.log)
+  .catch(console.error)
+  .finally(() => client.close());
