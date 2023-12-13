@@ -28,15 +28,15 @@ app.get("/api", (req, res) => {
     });
 });
 
-app.post("api", (req, res) => {
+app.post("/api", (req, res) => {
   const user = req.body;
 
   db.collection("user")
-    .insertOne()
+    .insertOne(user)
     .then((sonuc) => {
       res.status(201).json(sonuc);
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).json({ hata: "Did not add data" });
     });
 });

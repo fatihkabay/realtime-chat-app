@@ -14,7 +14,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-  })
+  });
 
   const toastOptions = {
     position: "bottom-right",
@@ -22,10 +22,10 @@ export default function Register() {
     pauseOnHover: true,
     draggable: true,
     theme: "dark",
-  }
+  };
 
   useEffect(() => {
-    if (localStorage.getItem('chat-app-user')) {
+    if (localStorage.getItem("chat-app-user")) {
       navigate("/");
     }
   });
@@ -33,20 +33,17 @@ export default function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-       const { username, email, password } = values;
-       const { data } = await axios.post(registerRoute, {
+      const { username, email, password } = values;
+      const { data } = await axios.post(registerRoute, {
         username,
         email,
         password,
-       });
-       if (data.status === false) {
+      });
+      if (data.status === false) {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
+        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
         navigate("/");
       }
     }
@@ -55,26 +52,23 @@ export default function Register() {
   const handleValidation = () => {
     const { username, email, password, confirmPassword } = values;
     if (password !== confirmPassword) {
-        toast.error("Password and confirm password do not match!", toastOptions);
-        return false;
-    }
-    else if (username.length < 3) {
-        toast.error("Username should be bigger than 3 characters!", toastOptions);
-        return false;
-    }
-    else if (password.length < 8) {
-        toast.error("This password should be min 8 characters!", toastOptions);
-        return false;
-    }
-    else if (email.length === "") {
-        toast.error("Email is required!", toastOptions);
-        return false;
+      toast.error("Password and confirm password do not match!", toastOptions);
+      return false;
+    } else if (username.length < 3) {
+      toast.error("Username should be bigger than 3 characters!", toastOptions);
+      return false;
+    } else if (password.length < 8) {
+      toast.error("This password should be min 8 characters!", toastOptions);
+      return false;
+    } else if (email.length === "") {
+      toast.error("Email is required!", toastOptions);
+      return false;
     }
     return true;
-  }
+  };
 
   const handleChange = (event) => {
-    setValues({...values, [event.target.name]:event.target.value})
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   return (
