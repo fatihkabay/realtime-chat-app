@@ -8,6 +8,7 @@ import Contacts from "../components/Contacts";
 export default function Chat() {
   const [contacts, setContacts] = useState();
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(undefined);
   const navigate = useNavigate();
   const location = useLocation()
 
@@ -21,15 +22,12 @@ export default function Chat() {
   }, [])
 
   useEffect(() => {
-    async function Storage() {
-      if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+      if (currentUser)
         navigate("/chat");
       else {
-        setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
-      }
+        setCurrentUser( JSON.parse(localStorage.getItem("chat-app-user")));
     }
-    return Storage;
-  });
+  }, [currentUser]);
 
   useEffect(() => {
     async function Profile() {
@@ -46,11 +44,15 @@ export default function Chat() {
     return Profile;
   }, [currentUser]);
 
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
+
   return (
     <Container>
       <h1>Hello {location.state.id} and welcome to the home</h1>
       <div className="container">
-        <Contacts contacts={contacts} currentUser={currentUser}/>
+        <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange}/>
       </div>
     </Container>
   );

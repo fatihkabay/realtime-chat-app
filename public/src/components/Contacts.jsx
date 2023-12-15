@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
 
-export default function Contacts({ contact, currentUser }) {
+export default function Contacts({ contact, currentUser, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
@@ -14,7 +14,10 @@ export default function Contacts({ contact, currentUser }) {
     }
   }, [currentUser]);
 
-  const changeCurrentMessage = (index, contact) => {};
+  const changeCurrentChat = (index, contact) => {
+    setCurrentSelected(index)
+    changeChat(contact)
+  };
 
   return (
     <>
@@ -54,7 +57,7 @@ export default function Contacts({ contact, currentUser }) {
               />
             </div>
             <div className="username">
-              <h1>{currentUserName}</h1>
+              <h2>{currentUserName}</h2>
             </div>
           </div>
         </Container>
